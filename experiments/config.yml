@@ -1,8 +1,10 @@
+# File to set the parameters for the experiments
+
 dataset: 'diff_var' # 'mnist' # 'blobs'
 samplesize_list: [500, 1900, 3300, 4700, 6100]
 hypothesis: 'alternative'
 level: 0.05
-runs: 100   # we used 5000 for the experiments in the paper
+runs: 100   # we used 5000 for the experiments in the paper but this takes a while
 
 # d=1
 #bandwidths_factors: [0]

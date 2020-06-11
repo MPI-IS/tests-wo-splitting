@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.spatial import distance_matrix
+''' Module to compute the median heuristic'''
 
 
 def median(x, y):

@@ -1,3 +1,5 @@
+'''File to run the experiments in Figure 1'''
+
 import torch
 from numpy.random import normal
 import numpy as np
