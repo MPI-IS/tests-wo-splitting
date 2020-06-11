@@ -104,7 +104,7 @@ def optimization(tau, Sigma, selection='continuous'):
         return np.array(beta_star)
 
 
-def psi_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accuracy=1e-6, constraints='Sigma'):
+def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accuracy=1e-6, constraints='Sigma'):
     """
     Runs the full test suggested in our paper.
     :param tau: observed statistic

@@ -1,0 +1,21 @@
+dataset: 'diff_var' # 'mnist' # 'blobs'
+samplesize_list: [500, 1900, 3300, 4700, 6100]
+hypothesis: 'alternative'
+level: 0.05
+runs: 100   # we used 5000 for the experiments in the paper
+
+# d=1
+#bandwidths_factors: [0]
+#add_linear: False
+# d=2
+#bandwidths_factors: [0]
+#add_linear: True
+# d=6
+bandwidths_factors: [-2, -1, 0, 1, 2]
+add_linear: True
+
+methods: ['ost', 'wald', 'naive', 'split0.1', 'split0.3', 'split0.5', 'split0.8']
+# constraints suggested in the paper Sigma beta \geq 0
+constraints: 'Sigma'
+
+

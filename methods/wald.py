@@ -36,7 +36,7 @@ def preprocessing(tau, Sigma, max_condition=1e-6):
 
 
 
-def chi_test(tau, Sigma, alpha, max_condition=1e-6):
+def wald_test(tau, Sigma, alpha, max_condition=1e-6):
     """
     Test based on the chi_d distribution.
     :param tau: observed test statistics (scaled with sqrt(n)

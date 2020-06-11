@@ -105,9 +105,10 @@ class LinearMMD:
         :param y_sample: data from Q
         :return:
         """
-        # convert data to torch tensors
-        x_sample = torch.tensor(x_sample)
-        y_sample = torch.tensor(y_sample)
+        if not isinstance(x_sample, torch.Tensor):
+            # convert data to torch tensors
+            x_sample = torch.tensor(x_sample)
+            y_sample = torch.tensor(y_sample)
         assert list(x_sample.size())[0] == list(y_sample.size())[0], 'datasets must have same samplesize'
 
         # determine length of the sample
