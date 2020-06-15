@@ -1,7 +1,7 @@
 # Learning kernel tests without data splitting
 
 Code for the experiments of the paper "Learning kernel tests without data splitting".
-For the camera-ready version we will create a Github repository and make the code publicly available.
+[https://arxiv.org/abs/2006.02286](https://arxiv.org/abs/2006.02286)
 
 The implementations of the methods as described in the paper are in the directory 'methods'.
 
