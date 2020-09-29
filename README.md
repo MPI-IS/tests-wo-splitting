@@ -1,7 +1,7 @@
 # Learning kernel tests without data splitting
 
 Code for the experiments of the paper "Learning kernel tests without data splitting".
-[https://arxiv.org/abs/2006.02286](https://arxiv.org/abs/2006.02286)
+[https://arxiv.org/abs/2006.02286](https://arxiv.org/abs/2006.02286) which will be presented at NeurIPS2020.
 
 The implementations of the methods as described in the paper are in the directory 'methods'.
 
