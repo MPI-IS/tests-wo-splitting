@@ -35,7 +35,7 @@ def generate_samples(dataset, hypothesis, samplesize):
 
     if dataset == 'mnist':
         # Note: this is not how we used it for our experiments. It reloads the whole dataset every time. If you want to
-        # run a lot of experiments with the mnist datset, consider loading the data once and then simply
+        # run a lot of experiments with the mnist dataset, consider loading the data once and then simply
         # drawing new random indices every iteration.
 
         # load data
@@ -57,5 +57,13 @@ def generate_samples(dataset, hypothesis, samplesize):
         x = P[idx_X, :]
         idx_Y = np.random.randint(len(Q), size=samplesize)
         y = Q[idx_Y, :]
+
+        if dataset == 'own_dataset':
+            '''
+            To utilize your owm distributions please put samples into the  numpy arrays x and y of shape n x p, 
+            where n is the (equal) samplesize  and p the dimensionality of your data'''
+            # x = np.array( YOUR SAMPLES FROM P HERE )
+            # y = np.array( YOUR SAMPLES FROM Q HERE )
+
 
     return x, y

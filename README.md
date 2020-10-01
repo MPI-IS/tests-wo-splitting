@@ -16,5 +16,10 @@ To asses type-I errors, change the parameter 'hypothesis' to 'null'.
 
 
 
+##### Your own dataset  
+To test the method on your own distributions P and Q, go to the file 'config.yml' and 
+set 'dataset' to 'own_dataet'. Further please go to 'datasets/generate_data.py' and specify
+how to draw samples from your custom distribution.
+
 ##### Dependencies
 Specified in the file requirements.txt

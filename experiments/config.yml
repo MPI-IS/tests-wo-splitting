@@ -1,6 +1,6 @@
 # File to set the parameters for the experiments
 
-dataset: 'diff_var' # 'mnist' # 'blobs'
+dataset: 'diff_var' # 'mnist' # 'blobs' # 'own_dataset'
 samplesize_list: [500, 1900, 3300, 4700, 6100]
 hypothesis: 'alternative'
 level: 0.05
