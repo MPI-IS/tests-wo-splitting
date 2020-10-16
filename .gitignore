@@ -113,3 +113,4 @@ venv.bak/
 
 # dont upload the data
 *.data
+*.pdf
