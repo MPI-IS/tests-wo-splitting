@@ -104,7 +104,7 @@ def optimization(tau, Sigma, selection='continuous'):
         return np.array(beta_star)
 
 
-def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accuracy=1e-6, constraints='Sigma',
+def ost_test(tau, Sigma, alpha=0.05, selection='discrete', max_condition=1e-6, accuracy=1e-6, constraints='Sigma',
              pval=False):
     """
     Runs the full test suggested in our paper.

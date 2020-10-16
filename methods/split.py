@@ -6,7 +6,7 @@ import numpy as np
 from methods import ost
 
 
-def split_test(tau_tr, tau_te, Sigma,  alpha, selection='continuous',  max_condition=1e-6, constraints='Sigma',
+def split_test(tau_tr, tau_te, Sigma,  alpha=0.05, selection='continuous',  max_condition=1e-6, constraints='Sigma',
                pval=False):
     """
     Function that computes the two samples test with data splitting. It already assumes that the data was split.
