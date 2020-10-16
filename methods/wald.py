@@ -62,6 +62,6 @@ def wald_test(tau, Sigma, alpha, max_condition=1e-6, pval=False):
             return 1
         else:
             return 0
-    else: 
+    else:
         # return p value
         return 1 - chi.cdf(x=t_obs)
