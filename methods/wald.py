@@ -36,13 +36,14 @@ def preprocessing(tau, Sigma, max_condition=1e-6):
 
 
 
-def wald_test(tau, Sigma, alpha, max_condition=1e-6):
+def wald_test(tau, Sigma, alpha, max_condition=1e-6, pval=False):
     """
     Test based on the chi_d distribution.
     :param tau: observed test statistics (scaled with sqrt(n)
     :param Sigma: observed covariance matrix
     :param alpha: level of the test
     :param max_condition: determines at which threshold eigenvalues are considered as 0
+    :param pval: if true, returns the conditional p value instead of the test result
     :return: level of the test
     """
     # instead of regularizing we preprocess Sigma and tau to get rid of 0 eigenvalues
@@ -56,7 +57,11 @@ def wald_test(tau, Sigma, alpha, max_condition=1e-6):
 
     # compute the 1-alpha quantile of the chi distribution with d degrees of freedom
     threshold = chi.ppf(q=1-alpha, df=d)
-    if t_obs > threshold:
-        return 1
-    else:
-        return 0
+    if not pval:
+        if t_obs > threshold:
+            return 1
+        else:
+            return 0
+    else: 
+        # return p value
+        return 1 - chi.cdf(x=t_obs)

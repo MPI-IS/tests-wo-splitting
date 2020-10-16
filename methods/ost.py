@@ -83,7 +83,7 @@ def optimization(tau, Sigma, selection='continuous'):
         A = matrix(np.array([tau]))
         b = matrix([1.])
 
-        initialization = matrix([1.]*d)
+        initialization = matrix([1.] * d)
         solvers.options['reltol'] = 1e-40
         solvers.options['abstol'] = 1e-10
         solvers.options['show_progress'] = False
@@ -104,7 +104,8 @@ def optimization(tau, Sigma, selection='continuous'):
         return np.array(beta_star)
 
 
-def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accuracy=1e-6, constraints='Sigma'):
+def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accuracy=1e-6, constraints='Sigma',
+             pval=False):
     """
     Runs the full test suggested in our paper.
     :param tau: observed statistic
@@ -114,6 +115,7 @@ def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accura
     :param max_condition: at which condition number the covariance matrix is truncated.
     :param accuracy: threshold to determine whether an entry is zero
     :param constraints: if 'Sigma'  we work with the constraints (Sigma beta) >=0. If 'positive' we work with beta >= 0
+    :param pval: if true, returns the conditional p value instead of the test result
     :return: 1 (reject), 0 (no reject)
     """
     assert constraints == 'Sigma' or constraints == 'positive', 'Constraints are not implemented'
@@ -129,7 +131,7 @@ def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accura
 
     if constraints == 'Sigma':
         # compute pseudoinverse to also handle singular covariances (see Appendix)
-        r_cond = max_condition                    # parameter which precision to use
+        r_cond = max_condition  # parameter which precision to use
         Sigma_inv = np.linalg.pinv(Sigma, rcond=r_cond, hermitian=True)
 
         # use Remark 1 to convert the problem
@@ -148,21 +150,31 @@ def ost_test(tau, Sigma, alpha, selection='discrete', max_condition=1e-6, accura
     # Use the rank of effective Sigma to determine how many degrees of freedom the covariance has after conditioning
     # for non-singular original covariance, this is the same number as the number of active dimensions |mathcal{U}|,
     # however, for singular cases using the rank is the right way to go.
-    tol = max_condition*np.max(np.linalg.eigvalsh(Sigma))
+    tol = max_condition * np.max(np.linalg.eigvalsh(Sigma))
     r = np.linalg.matrix_rank(effective_sigma, tol=tol, hermitian=True)
     # go back to notation used in the paper
     l = r
     if l > 1:
-        test_statistic = beta_star  @ tau / np.sqrt(beta_star @  Sigma @ beta_star)
-        threshold = chi_stats.ppf(q=1-alpha, df=l)
+        test_statistic = beta_star @ tau / np.sqrt(beta_star @ Sigma @ beta_star)
+        threshold = chi_stats.ppf(q=1 - alpha, df=l)
     else:
         vminus = truncation(beta_star=beta_star, tau=tau, Sigma=Sigma, accuracy=accuracy)
-        threshold = truncated_gaussian(var=beta_star@ Sigma @ beta_star, v_minus=vminus, level=alpha)
+        threshold = truncated_gaussian(var=beta_star @ Sigma @ beta_star, v_minus=vminus, level=alpha)
         test_statistic = beta_star @ tau
-
-    if test_statistic > threshold:
-        # reject
-        return 1
-    else:
-        # cannot reject
-        return 0
+    if not pval:
+        if test_statistic > threshold:
+            # reject
+            return 1
+        else:
+            # cannot reject
+            return 0
+    if pval:
+        if l > 1:
+            test_statistic = beta_star @ tau / np.sqrt(beta_star @ Sigma @ beta_star)
+            pvalue = 1 - chi_stats.cdf(x=test_statistic, df=l)
+        else:
+            test_statistic = beta_star @ tau / np.sqrt(beta_star @ Sigma @ beta_star)
+            vminus = truncation(beta_star=beta_star, tau=tau, Sigma=Sigma, accuracy=accuracy) / \
+                     np.sqrt(beta_star @ Sigma @ beta_star)
+            pvalue = 1 - (norm.cdf(x=test_statistic) - norm.cdf(x=vminus)) / (1 - norm.cdf(x=vminus))
+        return pvalue
