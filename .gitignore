@@ -110,3 +110,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 /ltt/cluster/before_2020_04_20/
+
+# dont upload the data
+*.data

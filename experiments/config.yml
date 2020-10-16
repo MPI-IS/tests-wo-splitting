@@ -16,7 +16,7 @@ runs: 100   # we used 5000 for the experiments in the paper but this takes a whi
 bandwidths_factors: [-2, -1, 0, 1, 2]
 add_linear: True
 
-methods: ['ost', 'wald', 'naive', 'split0.1', 'split0.3', 'split0.5', 'split0.8']
+methods: ['ost', 'wald', 'naive', 'split0.1', 'split0.5', 'split0.8']
 # constraints suggested in the paper Sigma beta \geq 0
 constraints: 'Sigma'
 

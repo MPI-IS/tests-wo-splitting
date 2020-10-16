@@ -20,12 +20,14 @@ fontP.set_size('xx-small')
 
 results = []
 runs = 1000
-for exp in range(0,35):
+for exp in range(0,30):
     with open('results_' + str(exp) + '.data', 'rb') as handle:
         results.append(pickle.load(handle))
 
 style = {'wald': '-.', 'naive': '--', 'ost': '-', 'split0.1': ':', 'split0.3': ':', 'split0.5': ':', 'split0.8': ':'}
 labels = {'wald': 'Wald', 'ost': 'ost', 'naive': 'naive', 'split0.1': 'split 0.1', 'split0.3': 'split 0.3', 'split0.5': 'split 0.5', 'split0.8': 'split 0.8'}
+markers = {'wald': 'x', 'ost': 'D', 'naive': '', 'split0.1': '*', 'split0.3': '^', 'split0.5': 'o', 'split0.8': 'v'}
+
 samplesize = []
 methods = []
 
@@ -40,7 +42,8 @@ for res in results:
         power[method] = [res['power']]
         methods.append(method)
 for method in methods:
-    plt.errorbar(samplesize, [1-pow for pow in power[method]],  label=labels[method], ls=style[method])
+    plt.plot(samplesize, [1-pow for pow in power[method]],  label=labels[method], ls=style[method],
+             marker=markers[method], markersize=5, mfc='none')
 plt.legend(ncol=2)
 plt.xlabel('sample size n')
 plt.ylabel('Type-II error')
