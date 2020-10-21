@@ -1,4 +1,4 @@
-from methods import ost, split, kernel, wald, median
+from . import ost, split, kernel, wald, median
 import warnings
 import numpy as np
 import matplotlib.pyplot as plt

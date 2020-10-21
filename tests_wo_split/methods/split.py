@@ -3,7 +3,7 @@ Module that implements the two-sample with data splitting
 """
 from scipy.stats import norm
 import numpy as np
-from methods import ost
+from . import ost
 
 
 def split_test(tau_tr, tau_te, Sigma,  alpha=0.05, selection='continuous',  max_condition=1e-6, constraints='Sigma',
@@ -30,7 +30,7 @@ def split_test(tau_tr, tau_te, Sigma,  alpha=0.05, selection='continuous',  max_
         Sigma_inv = np.linalg.pinv(Sigma, rcond=r_cond, hermitian=True)
         tau_tr = Sigma_inv @ tau_tr
         Sigma = Sigma_inv
-    
+
     beta_star = ost.optimization(tau=tau_tr, Sigma=Sigma, selection=selection)
 
     # used test statistics
