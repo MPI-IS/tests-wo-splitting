@@ -1,3 +1,5 @@
+[![Build status](https://raw.githubusercontent.com/MPI-IS-BambooAgent/sw_badges/master/badges/plans/testswithoutsplitting/build.svg?sanitize=true)](https://atlas.is.localnet/bamboo/browse/BAMEI-TWS/latest/)
+
 # Learning kernel tests without data splitting
 
 Code for the experiments of the paper "Learning kernel tests without
@@ -10,22 +12,23 @@ the directory 'methods'.
 
 ## Installation
 
-You can install the package as usual with the help of `pip` by calling
-
-    pip install .
-
-There is also `install` target in the `Makefile`, so you can simply run
-
-    make install
-
-We strongly suggest you install the package in a separate virtual
+We strongly suggest you to install the package in a separate virtual
 environment. You can create one by executing
 
-    python -m venv venv
+    python -m venv --copies my_venv
 
 from the root of the project and then activate it by running
 
-    . venv/bin/activate
+    . my_venv/bin/activate
+
+You can then install the package as usual with the help of `pip` by calling
+
+    pip install .
+
+or using the `install` target in the `Makefile` by simply running
+
+    make install
+
 
 ## Reproducing Figure 2
 
@@ -57,3 +60,16 @@ To test the method on your own distributions P and Q, go to the file
 'config.yml' and set 'dataset' to 'own_dataet'. Further please go to
 'datasets/generate_data.py' and specify how to draw samples from your
 custom distribution.
+
+## Author
+
+[Jonas Kübler](https://github.com/jmkuebler),
+Empirical Inference Department - Max Planck Institute for Intelligent Systems
+
+## License
+
+MIT License (see LICENSE.md)
+
+## Copyright
+
+© 2020, Max Planck Society - Max Planck Institute for Intelligent Systems
