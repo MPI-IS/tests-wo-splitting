@@ -1,21 +1,20 @@
 '''File to run the experiments in Figure 1'''
 
-import torch
-from numpy.random import normal
-import numpy as np
-from typing import Tuple, Dict, List, Callable
 import argparse
 from pathlib import Path
 import pickle
-import yaml
-import os
+from typing import List
 
-from methods import ost, split, kernel, wald, median
-from datasets.generate_data import generate_samples
+import numpy as np
+import yaml
+
+from tests_wo_split.methods import ost, split, kernel, wald, median
+from tests_wo_split.datasets.generate_data import generate_samples
 
 
 def estimate_power(samplesize_list: list, hypothesis: str, level, runs,
-                   exp_number: int, bandwidths_factors: List, methods: List, constraints,
+                   exp_number: int, data_dir: Path,
+                   bandwidths_factors: List, methods: List, constraints,
                    max_condition=1e-6, add_linear=False, dataset='diff_var') -> float:
     """
     Method that runs experiments. Iterate over the paramenter exp_number to consider different methods and samplesizes.
@@ -25,6 +24,7 @@ def estimate_power(samplesize_list: list, hypothesis: str, level, runs,
     :param level: usually set to 0.05
     :param runs: number of independent trials that are averaged over. We used 5000, but it takes a while
     :param exp_number: iterator for different experiments
+    :paran data_dir: directory containing the results
     :param bandwidths_factors: factors for the gaussian kernels that are considered.
     :param methods: list containing the considered methods
     :param constraints: 'Sigma' => leads to the suggested OST. 'positive' uses the canonical constraints without remark 1
@@ -34,12 +34,9 @@ def estimate_power(samplesize_list: list, hypothesis: str, level, runs,
     :return:
     """
     np.random.seed(1 + exp_number % len(samplesize_list))
-    # first check if folder for output exists and is empty
-    folder = 'results'
-    folder = str(Path(folder).expanduser())
-    assert os.path.exists(folder), 'folder to store data does not exist'
-    path = folder + '/results_' + str(args.exp_number) + '.data'
-    path = str(Path(path).expanduser())
+
+    filename = "results_{}.data".format(args.exp_number)
+    path = data_dir.joinpath(filename)
 
     samplesize = samplesize_list[exp_number % len(samplesize_list)]
     method = methods[int(exp_number / len(samplesize_list))]
@@ -48,7 +45,7 @@ def estimate_power(samplesize_list: list, hypothesis: str, level, runs,
         samplesize = samplesize - samplesize % 4
 
     # create a list to store outcomes of individual runs
-    outcome = [0]*runs
+    outcome = [0] * runs
 
     for i in range(runs):
         # print(i)
@@ -76,7 +73,8 @@ def estimate_power(samplesize_list: list, hypothesis: str, level, runs,
                                       max_condition=max_condition, constraints=constraints)
         if method_category == 'wald':
             tau, Sigma = mmd.estimate(x, y)
-            outcome[i] = wald.wald_test(tau=tau, Sigma=Sigma, alpha=level, max_condition=max_condition)
+            outcome[i] = wald.wald_test(tau=tau, Sigma=Sigma, alpha=level,
+                                        max_condition=max_condition)
         if method_category == 'split':
             # compute the index at which to split
             cutoff = int(len(x) * splitratio)
@@ -105,18 +103,40 @@ def estimate_power(samplesize_list: list, hypothesis: str, level, runs,
     results = {'samplesize': samplesize, 'power': power, 'method': method}
 
     # write results to file
-    f = open(path, 'wb')
-    pickle.dump(results, f)
-    f.close()
+    with open(path, 'wb') as f:
+        pickle.dump(results, f)
 
 
 if __name__ == '__main__':
-    with open('config.yml', 'r') as f:
-        config = yaml.safe_load(f)
 
-    # the process number determines the samplesize and is iterated over
+    #: Default directory containing the results
+    DEFAULT_DATA_DIR = Path(__file__).resolve().parent.parent.joinpath("data")
+
     parser = argparse.ArgumentParser()
-    parser.add_argument('--exp_number', default=None, type=int, required=False,
-                        help='The parameter that indexes the experiment')
+    parser.add_argument(
+        '-c', '--config',
+        help="Path to the config file",
+        type=str,
+        default="config.yml")
+    parser.add_argument(
+        '-n', '--exp_number',
+        help='The parameter that indexes the experiment',
+        type=int,
+        required=True)
+    parser.add_argument(
+        '-d', '--dir',
+        help="Directory containing the results",
+        type=str,
+        default=DEFAULT_DATA_DIR)
     args = parser.parse_args()
-    estimate_power(**config, exp_number=args.exp_number)
+
+    # Read config file
+    with open(args.config, 'r') as fd:
+        config = yaml.safe_load(fd)
+
+    # Create data directory
+    data_dir = Path(args.dir)
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    # Run the experiments
+    estimate_power(**config, exp_number=args.exp_number, data_dir=data_dir)
