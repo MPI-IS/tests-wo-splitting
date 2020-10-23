@@ -6,12 +6,12 @@ import matplotlib.pyplot as plt
 def pvalue(x: list, y: list, bandwidths_factors=[-2,-1,0,1,2], method='ost', constraints='Sigma', max_condition=1e-6) \
         -> float:
     """
-    Method that runs experiments. Iterate over the paramenter exp_number to consider different methods and samplesizes.
-    All the parameters can be controlled via the file 'config.yml'.
+    Compute a p-value for two samples.
     :param x: Sample from P
     :param y: Sample from Q
-    :param bandwidths_factors: factors for the gaussian kernels that are considered.
-    :param methods: which method ('wald', 'ost', 'split0.1'...)
+    :param bandwidths_factors: factors for the gaussian kernels that are considered. The bandwidths are constructed as
+    sigma_0 * 2**factor, where sigma_0 is chosen by the median heuristic, and factors runs over the list.
+    :param method: which method ('wald', 'ost', 'split0.1'...)
     :param constraints: 'Sigma' => leads to the suggested OST. 'positive' uses the canonical constraints without remark 1
     :param max_condition: just to numerically stabilize in case of almost singular covariance (see Appendix of the paper)
     :return: pvalue

@@ -30,6 +30,28 @@ or using the `install` target in the `Makefile` by simply running
     make install
 
 
+## Computing p-values
+
+If you want perform a two sample test on your own samples X and Y you can use the function `pvalue()` in 
+`tests-wo-split/methods/pvalue`.
+A simple test of the validity of our method is to see whether the p-values are uniformly distributed 
+under the null hypothesis (samples come from the same distribution).
+#### Example: uniform distribution of p-values
+    import matplotlib.pyplot as plt
+    from tests_wo_split.methods.pvalue import pvalue
+    import numpy as np
+    runs = 1000
+    size = 1000
+    p = []
+    for i in range(runs):
+        x = np.random.normal(0,1, size=size)
+        y = np.random.normal(0,1, size=size)
+        p.append(pvalue(x=x, y=y))
+    plt.hist(p)
+    plt.show()
+
+
+
 ## Reproducing Figure 2
 
 To reproduce our results of Figure 2 you can use the provided
