@@ -1,6 +1,7 @@
 import argparse
 from pathlib import Path
 import pickle
+import re
 
 from matplotlib.font_manager import FontProperties
 import matplotlib
@@ -28,6 +29,11 @@ markers = {'wald': 'x', 'ost': 'D', 'naive': '', 'split0.1': '*',
            'split0.3': '^', 'split0.5': 'o', 'split0.8': 'v'}
 
 
+def numeric(path):
+    match = re.search(r"results_(\d+)\.data", str(path))
+    return int(match.group(1))
+
+
 if __name__ == '__main__':
 
     #: Default directory containing the results
@@ -46,7 +52,7 @@ if __name__ == '__main__':
 
     # Load results
     results = []
-    for file_path in sorted(data_dir.glob('results_*.data')):
+    for file_path in sorted(data_dir.glob('results_*.data'), key=numeric):
         with open(file_path, 'rb') as handle:
             results.append(pickle.load(handle))
 
